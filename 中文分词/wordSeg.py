@@ -9,7 +9,7 @@ class wordSehmentation:
         with open(self.filePath, 'r', encoding='utf-8') as file:
             for i in file.readlines():
                 str = str + i
-        print(str)
+        print()
 
 
 
