@@ -16,7 +16,12 @@ def dicProcessTest():
             flag = flag + 1
     print(result)
 
+def strTest():
+    str = 'hello'
+    str = str[0:3]
+    print(str)
+
 
 
 if __name__ == '__main__':
-    dicProcessTest()
+    strTest()

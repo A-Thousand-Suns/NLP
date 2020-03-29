@@ -23,6 +23,7 @@ class wordSehmentation:
         for i in re.split(pattern, content):
             sentenceList.append(i)
 
+        print(sentenceList)
         return sentenceList
 
     def readDic(self):
@@ -48,40 +49,46 @@ class wordSehmentation:
         return dicIndex
 
     def maxMatch(self, sentence, dicList):
-        print(sentence, dicList)
         search = False
+        pos = 0
         word = ''
         dicIndex = self.dicIndex()
         file = open('result.txt', 'w')
 
-        for i in sentence:
+        while (sentence.__len__() != 0):
+            char = sentence[pos]
+            pos = pos + 1
+
             if(not search):
-                if(dicIndex.get(i)):
+                if(dicIndex.get(char)):
                     search = True
-                    listToChoose = dicList[dicIndex[i][0]: dicIndex[i][1] + 1]
+                    listToChoose = dicList[dicIndex[char][0]: dicIndex[char][1] + 1]
                     if sentence in listToChoose:
-                        print(sentence)
-                        file.write(sentence )
+                        file.write(sentence + ' ')
                         return
                 else:
-                    file.write(i + ' ')
+                    file.write(char + ' ')
+                    sentence = sentence[pos+1: sentence.__len__()]
+                    pos = 0
+                    word = ''
+                    search = False
                     continue
 
-            print('----------------------')
-            word = word + i
+            word = word + char
+
             for j in listToChoose[:]:
-                print(word)
-                print('old dic:')
-                print(listToChoose)
                 if (not(j.startswith(word))):
                     listToChoose.remove(j)
-                print('new dic:')
-                print(listToChoose)
 
-            if((word == sentence) or (listToChoose.__len__() == 0) or ((listToChoose.__len__() == 1) and (word in listToChoose))):
+            if((sentence.__len__() == 1) or (word == sentence) or (listToChoose.__len__() == 0) or ((listToChoose.__len__() == 1) and (word in listToChoose))):
+                word = word[0 : pos-1]
                 file.write(word + ' ')
+                sentence = sentence[pos-1 : sentence.__len__()]
                 print('result is :' + word)
+                print(sentence)
+                print('------------')
                 search = False
+                pos = 0
                 word = ''
 
         file.close()
@@ -102,4 +109,4 @@ if __name__ == '__main__':
     filePath = 'testCase.txt'
     dicPth = 'dictionary.txt'
     c = wordSehmentation(filePath, dicPth)
-    c.dicIndex()
+    c.run()
