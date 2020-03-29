@@ -109,4 +109,3 @@ if __name__ == '__main__':
     filePath = 'testCase.txt'
     dicPth = 'dictionary.txt'
     c = wordSehmentation(filePath, dicPth)
-    c.run()
