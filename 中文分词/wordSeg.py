@@ -1,5 +1,6 @@
 #coding = utf-8
 import re
+import copy
 
 class wordSehmentation:
     def __init__(self, filePath, dicPath):
@@ -19,7 +20,6 @@ class wordSehmentation:
         pattern = r'“|”|\n|-|：|？|,|\.|/|;|\'|`|\[|\]|<|>|\?|:|"|\{|\}|\~|!|@|#|\$|%|\^|&|\(|\)|-|=|\_|\+|，|。|、|；|‘|’|【|】|·|！| |…|（|）'
 
         for i in re.split(pattern, content):
-            print(i)
             sentenceList.append(i)
 
         return sentenceList
@@ -33,6 +33,46 @@ class wordSehmentation:
 
         return dicList
 
+    def maxMatch(self, sentence, dicList):
+        print(sentence, dicList)
+        word = ''
+        file = open('result.txt', 'w')
+        listToChoose = copy.deepcopy(dicList)
+
+        if sentence in dicList:
+            print(sentence)
+            file.write(sentence + ' ')
+            return
+
+        for i in sentence[:]:
+            print('----------------------')
+            word = word + i
+            for j in listToChoose[:]:
+                print(word)
+                print('old dic:')
+                print(listToChoose)
+                if (not(j.startswith(word))):
+                    listToChoose.remove(j)
+                print('new dic:')
+                print(listToChoose)
+
+            if((word == sentence) or (listToChoose.__len__() == 0) or ((listToChoose.__len__() == 1) and (word in listToChoose))):
+                listToChoose = copy.deepcopy(dicList)
+                file.write(word + ' ')
+
+                print('result is :' + word)
+                word = ''
+
+        file.close()
+        return
+
+    def run(self):
+        sentenceList = self.cutSentence()
+        dicList = self.readDic()
+
+        for i in sentenceList:
+            self.maxMatch(i,dicList)
+
 
 
 
@@ -41,4 +81,4 @@ if __name__ == '__main__':
     filePath = 'testCase.txt'
     dicPth = 'dictionary.txt'
     c = wordSehmentation(filePath, dicPth)
-    c.cutSentence()
+    c.run()

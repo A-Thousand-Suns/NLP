@@ -5,4 +5,10 @@ def spaceTest():
 
 
 if __name__ == '__main__':
-    spaceTest()
+    #spaceTest()
+    test = '1234'
+    str = '123'
+    print(str.startswith(test))
+    list = [1]
+    list.remove(1)
+    print(list.__len__())
