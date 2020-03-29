@@ -10,16 +10,18 @@ class wordSehmentation:
         with open(self.filePath, 'r', encoding='utf-8') as file:
             for i in file.readlines():
                 content = content + i
-        content.replace('\n', '')
-        content.replace('\r', '')
-        #print(content)
+        content.strip('\n')
         return content
 
     def cutSentence(self):
         content = self.readFile()
-        pattern = r'：|？|,|\.|/|;|\'|`|\[|\]|<|>|\?|:|"|\{|\}|\~|!|@|#|\$|%|\^|&|\(|\)|-|=|\_|\+|，|。|、|；|‘|’|【|】|·|！| |…|（|）'
+        pattern = r'\n|-|：|？|,|\.|/|;|\'|`|\[|\]|<|>|\?|:|"|\{|\}|\~|!|@|#|\$|%|\^|&|\(|\)|-|=|\_|\+|，|。|、|；|‘|’|【|】|·|！| |…|（|）'
         for i in re.split(pattern, content):
             print(i)
+
+    def readDic(self):
+        pass
+
 
 if __name__ == '__main__':
     a = 'testCase.txt'
