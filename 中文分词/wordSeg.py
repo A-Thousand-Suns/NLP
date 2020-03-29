@@ -61,7 +61,7 @@ class wordSehmentation:
                     listToChoose = dicList[dicIndex[i][0]: dicIndex[i][1] + 1]
                     if sentence in listToChoose:
                         print(sentence)
-                        file.write(sentence + ' ')
+                        file.write(sentence )
                         return
                 else:
                     file.write(i + ' ')
