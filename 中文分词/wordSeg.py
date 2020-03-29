@@ -1,6 +1,7 @@
 #coding = utf-8
 import re
 import copy
+import hashlib
 
 class wordSehmentation:
     def __init__(self, filePath, dicPath):
@@ -33,18 +34,39 @@ class wordSehmentation:
 
         return dicList
 
+    def dicIndex(self):
+        flag = 0
+        dicIndex = {}
+        with open(self.dicPath, 'r', encoding='utf-8') as file:
+            for i in file.readlines():
+                if(dicIndex.get(i[0])):
+                    dicIndex[i[0]][1] = flag
+                else:
+                    dicIndex[i[0]] = [flag, flag]
+                flag = flag + 1
+        print(dicIndex)
+        return dicIndex
+
     def maxMatch(self, sentence, dicList):
         print(sentence, dicList)
+        search = False
         word = ''
+        dicIndex = self.dicIndex()
         file = open('result.txt', 'w')
-        listToChoose = copy.deepcopy(dicList)
 
-        if sentence in dicList:
-            print(sentence)
-            file.write(sentence + ' ')
-            return
+        for i in sentence:
+            if(not search):
+                if(dicIndex.get(i)):
+                    search = True
+                    listToChoose = dicList[dicIndex[i][0]: dicIndex[i][1] + 1]
+                    if sentence in listToChoose:
+                        print(sentence)
+                        file.write(sentence + ' ')
+                        return
+                else:
+                    file.write(i + ' ')
+                    continue
 
-        for i in sentence[:]:
             print('----------------------')
             word = word + i
             for j in listToChoose[:]:
@@ -57,10 +79,9 @@ class wordSehmentation:
                 print(listToChoose)
 
             if((word == sentence) or (listToChoose.__len__() == 0) or ((listToChoose.__len__() == 1) and (word in listToChoose))):
-                listToChoose = copy.deepcopy(dicList)
                 file.write(word + ' ')
-
                 print('result is :' + word)
+                search = False
                 word = ''
 
         file.close()
@@ -81,4 +102,4 @@ if __name__ == '__main__':
     filePath = 'testCase.txt'
     dicPth = 'dictionary.txt'
     c = wordSehmentation(filePath, dicPth)
-    c.run()
+    c.dicIndex()

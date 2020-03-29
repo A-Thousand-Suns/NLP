@@ -3,12 +3,20 @@ def spaceTest():
     for i in text.replace('\t', ''):
         print(ord(i))
 
+def dicProcessTest():
+    flag = 0
+    path = 'dictionary.txt'
+    result = {}
+    with open(path, 'r', encoding='utf-8') as file:
+        for i in file.readlines():
+            if (result.get(i[0])):
+                result[i[0]][1] = flag
+            else:
+                result[i[0]] = [flag, flag]
+            flag = flag + 1
+    print(result)
+
+
 
 if __name__ == '__main__':
-    #spaceTest()
-    test = '1234'
-    str = '123'
-    print(str.startswith(test))
-    list = [1]
-    list.remove(1)
-    print(list.__len__())
+    dicProcessTest()
