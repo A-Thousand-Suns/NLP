@@ -18,7 +18,7 @@ def dicProcessTest():
 
 def strTest():
     str = 'hello'
-    str = str[0:3]
+    str = str[:2]
     print(str)
 
 

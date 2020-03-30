@@ -1,7 +1,6 @@
 #coding = utf-8
 import re
-import copy
-import hashlib
+import threading
 
 class wordSehmentation:
     def __init__(self, filePath, dicPath):
@@ -49,13 +48,18 @@ class wordSehmentation:
         return dicIndex
 
     def maxMatch(self, sentence, dicList):
+        print('******do function*******\n')
+        wirteLock = threading.Lock()
         search = False
         pos = 0
         word = ''
         dicIndex = self.dicIndex()
-        file = open('result.txt', 'w')
+        wirteLock.acquire()
+        file = open('result.txt', 'a')
 
         while (sentence.__len__() != 0):
+            print('rest sentence:' + sentence)
+            print('pos is:' + str(pos))
             char = sentence[pos]
             pos = pos + 1
 
@@ -64,11 +68,13 @@ class wordSehmentation:
                     search = True
                     listToChoose = dicList[dicIndex[char][0]: dicIndex[char][1] + 1]
                     if sentence in listToChoose:
-                        file.write(sentence + ' ')
+                        print('result is :' + sentence)
+                        file.write(sentence + '\n')
                         return
                 else:
-                    file.write(char + ' ')
-                    sentence = sentence[pos+1: sentence.__len__()]
+                    file.write(char + '\n')
+                    print('result is :' + char)
+                    sentence = sentence[pos: ]
                     pos = 0
                     word = ''
                     search = False
@@ -80,18 +86,27 @@ class wordSehmentation:
                 if (not(j.startswith(word))):
                     listToChoose.remove(j)
 
-            if((sentence.__len__() == 1) or (word == sentence) or (listToChoose.__len__() == 0) or ((listToChoose.__len__() == 1) and (word in listToChoose))):
-                word = word[0 : pos-1]
-                file.write(word + ' ')
-                sentence = sentence[pos-1 : sentence.__len__()]
+            if( word == sentence):
+                file.write(word + '\n')
                 print('result is :' + word)
-                print(sentence)
+                print('------------')
+                return
+
+            if(listToChoose.__len__() == 0):
+                word = word[:pos-1]
+                file.write(word + '\n')
+                sentence = sentence[pos-1:]
+                print('result is :' + word)
                 print('------------')
                 search = False
                 pos = 0
                 word = ''
 
+
+
+
         file.close()
+        wirteLock.release()
         return
 
     def run(self):
@@ -99,7 +114,8 @@ class wordSehmentation:
         dicList = self.readDic()
 
         for i in sentenceList:
-            self.maxMatch(i,dicList)
+            t = threading.Thread(target=self.maxMatch, args=(i, dicList,))
+            t.run()
 
 
 
@@ -109,3 +125,4 @@ if __name__ == '__main__':
     filePath = 'testCase.txt'
     dicPth = 'dictionary.txt'
     c = wordSehmentation(filePath, dicPth)
+    c.run()
